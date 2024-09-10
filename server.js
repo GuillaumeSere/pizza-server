@@ -2,8 +2,11 @@ const express = require("express");
 const Pizza = require("./models/pizzaModel");
 const app = express();
 const db = require("./db");
+const cors = require('cors');
 
 app.use(express.json());
+
+app.use(cors());
 
 const path = require('path')
 
