@@ -6,7 +6,13 @@ const cors = require('cors');
 
 app.use(express.json());
 
-app.use(cors());
+// Configuration CORS pour permettre les requêtes provenant de ton frontend
+app.use(cors({
+    origin: 'http://localhost:3000', // Autorise seulement ton frontend local
+    credentials: true, // Si tu as besoin d'envoyer des cookies ou des en-têtes d'authentification
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 const path = require('path')
 
