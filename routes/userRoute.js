@@ -38,4 +38,16 @@ router.post("/login", async (req, res) => {
     }
 })
 
+router.get('/getallusers', async (req, res) => {
+    console.log("Requête reçue pour getAllUsers");
+    try {
+        const users = await User.find({}, '-password');
+        console.log("Utilisateurs trouvés:", users.length);
+        res.json(users);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs:", error);
+        res.status(500).json({ message: "Erreur serveur", error: error.message });
+    }
+});
+
 module.exports = router

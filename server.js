@@ -1,18 +1,36 @@
 const express = require("express");
+const cors = require("cors");
 const Pizza = require("./models/pizzaModel");
 const app = express();
 const db = require("./db");
-const cors = require('cors');
+
+app.use((req, res, next) => {
+    console.log(`Requête reçue: ${req.method} ${req.url}`);
+    console.log('Origin:', req.headers.origin);
+    next();
+  });
+
+// Configuration CORS plus détaillée
+const corsOptions = {
+  origin: function (origin, callback) {
+
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = ['http://localhost:3000', 'https://localhost:8000'];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Non autorisé par CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
-
-// Configuration CORS pour permettre les requêtes provenant de ton frontend
-app.use(cors({
-    origin: 'http://localhost:3000', // Autorise seulement ton frontend local
-    credentials: true, // Si tu as besoin d'envoyer des cookies ou des en-têtes d'authentification
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 const path = require('path')
 
@@ -32,5 +50,12 @@ app.get("/", (req, res) => {
 
 
 const port = process.env.PORT || 8000;
+const host = '0.0.0.0'; // Écoute sur toutes les interfaces réseau
 
-app.listen(port, () => `Server running on port 🔥`);
+app.listen(port, host, (err) => {
+    if(err) {
+        console.error(`Erreur lors du démarrage du serveur : ${err}`);
+    } else {
+        console.log(`Le serveur fonctionne sur http://${host}:${port} 🔥`);
+    }
+});
