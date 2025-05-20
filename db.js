@@ -8,11 +8,11 @@ mongoose.connect(mongoURL, {useUnifiedTopology:true, useNewUrlParser:true})
 let db = mongoose.connection
 
 db.on("connected", () => {
-    console.log(`Mongo DB Connected Successfull`),
+    console.log(`Mongo DB Connected Successfull`)
 })
 
 db.on('error', () => {
-    console.log(`Mongo DB Connection Failed`),
+    console.log(`Mongo DB Connection Failed`)
 })
 
 module.exports = mongoose;
